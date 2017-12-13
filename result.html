@@ -7,15 +7,17 @@
 <style>
     body {
         color: white;
-        font-family: "Axure Handwriting";
+        font-family: "Axure Handwriting", "Segoe Print", "Comic Sans MS";
         font-size: 16pt;
-        background: #EE8182 url("./love.png");
-        margin-top: 50px;
-        margin-left: 50px;
+        background: #EE8182;
+        background-image: url("https://static.wixstatic.com/media/311eea_f642d34bac85470aa1ade9410980338a~mv2_d_1411_1411_s_2.png/v1/fill/w_1176,h_917,al_c,usm_0.66_1.00_0.01/311eea_f642d34bac85470aa1ade9410980338a~mv2_d_1411_1411_s_2.png") ;
+        margin-top: 60px;
+        margin-left: 170px;
+        margin-right: 170px;
     }
 
     h1 {
-        font-family: "orange juice";
+        font-family: "orange juice", "SWScrpc", "Star Jedi Outline", "Impact";
         font-size: 30pt;
     }
 
@@ -32,15 +34,38 @@
         resize: none;
     }
 
-    .button {
+    button {
         background-color: #ffffff;
+        border: 2px #EE8182 solid;
+        color: #EE8182;
+        font: inherit;
         padding: 10px 24px;
-        transition-duation: 0.4s;
+        transition-duration: 0.4s;
+        cursor: pointer;
     }
 
-    .button :hover {
+    #button:hover {
         background-color: #EE8182;
+        border: 2px white solid;
         color: white;
+    }
+
+    img {
+        vertical-align: middle;
+        border-radius: 70px;
+        margin: 10px;
+    }
+
+    a {
+        text-decoration: none;
+        color: white;
+    }
+
+    .link:hover {
+        opacity: 0.7;
+    }
+    li {
+        margin: 15px;
     }
 </style>
 
@@ -49,18 +74,22 @@
     function calculate() {
         window.location = window.location.origin + window.location.pathname + '?access_token={{token}}&id={{id}}&name=' + document.getElementById('name').value
     }
+
 </script>
-<div style="float: left; width: 50%;">
-    <h1>Your Profile</h1>
-    <img src="{{my_pic}}">
-    <span>{{my_name}}</span>
+<div style="float: left; width: 40%;">
+    <h1>My Profile</h1>
+    <a href = '{{my_home}}'>
+        <img class='link' src='{{my_pic}}'>
+        <span class='link'>{{my_name}}</span>
+    </a>
+
 </div>
 
-<div style="float: right; width: 50%;">
-    <form>Name:<br>
-        <input id='name' type="text" name="name" value="{{name}}">
+<div style="float: right; width: 60%;">
+    <form><h1>Enter a name:</h1><br>
+        <input id='name' type='text' name='name' value='{{name}}'>
+        <button id='button' type='button' onclick='calculate()'>Calculate</button>
     </form>
-    <button type="button" onclick="calculate()">Calculate!</button>
 
     {% if name != '' %}
     <h3>{{percentage}}%</h3>
@@ -71,8 +100,10 @@
     <ul>
         {% for s in suggestions %}
         <li>
-        <img src="{{s.url}}">
-        <span>{{s.name}}</span>
+                <a href="{{s.home}}">
+                    <img class='link' src='{{s.url}}' />
+                    <span class='link'>{{s.name}}</span>
+                </a>
         </li>
         {% endfor %}
     </ul>

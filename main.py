@@ -31,7 +31,7 @@ LOVE_CALCULATOR_TOKEN = 'RnItXxPrMjmshYiCtTzC920HBA4Ep1XNgDCjsny6U1NWfzDSZU'
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        template_values = {'page_title': "Find My Lover"}
+        template_values = {'page_title': "Lover Finder"}
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
@@ -56,16 +56,17 @@ def get_profiles_by_name(name, token):
     result = safe_get(url)['data'][:5]
     response = []
     for u in result:
-        url, name = get_user_info(u['id'], token)
-        response.append({'url': url, 'name': name, 'id': id})
+        url, name, home = get_user_info(u['id'], token)
+        response.append({'url': url, 'name': name, 'id': id, "home" : home})
     return response
 
 
 def get_user_info(id, token):
-    params = urllib.urlencode({"access_token": token, 'fields': 'picture,name,id'})
+    params = urllib.urlencode({"access_token": token, 'fields': 'picture.width(120).height(120),name,id'})
     url = '{}/{}?{}'.format(BASE_URL, id, params)
     result = safe_get(url)
-    return result["picture"]["data"]["url"], result["name"]
+    home = "https://www.facebook.com/app_scoped_user_id/" + id + "/"
+    return result["picture"]["data"]["url"], result["name"], home
 
 
 def get_match_rating(fname, sname):
@@ -85,11 +86,11 @@ class MatchHandler(webapp2.RequestHandler):
         token = self.request.params.get('access_token')
         id = self.request.params.get('id')
         query = self.request.params.get('name', '')
-        my_pic, my_name = get_user_info(id, token)
+        my_pic, my_name, my_home = get_user_info(id, token)
         suggestions = get_profiles_by_name(query, token)
         word, percentage = get_match_rating(my_name.split()[0], query)
 
-        template_values = {'page_title': "Find My Lover",
+        template_values = {'page_title': "Lover Finder",
                            'token': token,
                            'id': id,
                            'suggestions': suggestions,
@@ -97,7 +98,9 @@ class MatchHandler(webapp2.RequestHandler):
                            'name': query,
                            'percentage': percentage,
                            'my_name': my_name,
-                           'my_pic': my_pic}
+                           'my_pic': my_pic,
+                           'my_home': my_home
+                           }
         template = JINJA_ENVIRONMENT.get_template('result.html')
         self.response.write(template.render(template_values))
 
