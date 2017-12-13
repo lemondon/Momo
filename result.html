@@ -1,0 +1,84 @@
+<!HTML DOCTYPE>
+<html>
+<head>
+    <title>{{page_title}}</title>
+</head>
+
+<style>
+    body {
+        color: white;
+        font-family: "Axure Handwriting";
+        font-size: 16pt;
+        background: #EE8182 url("./love.png");
+        margin-top: 50px;
+        margin-left: 50px;
+    }
+
+    h1 {
+        font-family: "orange juice";
+        font-size: 30pt;
+    }
+
+    input {
+        border: 1px solid white;
+        color: #EE8182;
+        font-size: 16pt;
+        width: 60%;
+        height: 35px;
+        padding: 20px 20px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        background-color: #ffffff;
+        resize: none;
+    }
+
+    .button {
+        background-color: #ffffff;
+        padding: 10px 24px;
+        transition-duation: 0.4s;
+    }
+
+    .button :hover {
+        background-color: #EE8182;
+        color: white;
+    }
+</style>
+
+<body>
+<script>
+    function calculate() {
+        window.location = window.location.origin + window.location.pathname + '?access_token={{token}}&id={{id}}&name=' + document.getElementById('name').value
+    }
+</script>
+<div style="float: left; width: 50%;">
+    <h1>Your Profile</h1>
+    <img src="{{my_pic}}">
+    <span>{{my_name}}</span>
+</div>
+
+<div style="float: right; width: 50%;">
+    <form>Name:<br>
+        <input id='name' type="text" name="name" value="{{name}}">
+    </form>
+    <button type="button" onclick="calculate()">Calculate!</button>
+
+    {% if name != '' %}
+    <h3>{{percentage}}%</h3>
+    <h3>{{word}}</h3>
+
+    {% if percentage > 40 %}
+    <h3>Here are some suggested Facebook profiles:</h3>
+    <ul>
+        {% for s in suggestions %}
+        <li>
+        <img src="{{s.url}}">
+        <span>{{s.name}}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
+</div>
+
+</body>
+</html>
